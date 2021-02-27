@@ -1,1 +1,549 @@
-
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# **Taller Minería de Datos**\n",
+    "\n",
+    "En este taller, cargará y procesará los datos de Arboles recopilados por el Departamento Administrativo Nacional de Estadística (DANE).\n",
+    "\n",
+    "El Censo del Árbol Urbano, tiene por objeto el levantamiento de un conjunto de datos básicos asociados a las características morfológicas, silviculturales, fitosanitarias y de entorno de la población de árboles. Estos datos se compilan con el fin de obtener un conjunto de estadísticas básicas y oficiales sobre el volumen, estructura, distribución, estado, ubicación de la población.\n",
+    "\n",
+    "La base de datos se encuentra en la carpeta de materiales del curso. La base de datos cuenta con las siguientes variables:\n",
+    "\n",
+    "  + **objectid**: Corresponde al código de identificación del árbol, el cual es único e irrepetible.\n",
+    "  + **fisiologia**: Clasificación de los arboles según sus características relacionadas conla densidad del follaje y su adaptación ambiental. \n",
+    "  + **altura**: Altura total del árbol.\n",
+    "  + **diametro**: Diámetro ecuatorial de la copa del árbol.\n",
+    "  + **pap**: Perímetro del árbol a la altura del pecho.\n",
+    "  + **perimetro**: Perímetro basaldel árbol.\n",
+    "  + **altura_fus**: Corresponde a la altura del tronco medido desde la base del fuste hasta la primera rama, medido en metros con dos decimales.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Integrantes del grupo:\n",
+    "\n",
+    "______________________________________________________________\n",
+    "______________________________________________________________\n",
+    "______________________________________________________________"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## Use para este taller los siguientes paquetes\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sn"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## Use este bloque de código para leer la base de datos de arboles"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Parte 1: Limpieza de datos\n",
+    "\n",
+    "La base de datos contiene actualmente las columnas llamadas `fisiología` y , `objectid`. El objetivo es crear una nueva columna llamada `fis_num` que identifique mediante un código numérico las diferentes fisiologías de los arboles de la base de datos, de la siguiente manera:\n",
+    "\n",
+    "+ 1: Perennifolio\n",
+    "+ 2: Semicaducifolio\n",
+    "+ 3: Caducifolio\n",
+    "\n",
+    "Posterior a la creación de la columna anterior, genere otra columna llamada `cod_fis` en la cual se concatene el código de identificación de cada árbol con `fis_num`, la cual debe tener la siguiente configuración: `XXXXXX-X`.\n",
+    "\n",
+    "**<p style=\"color:red\">Importante:</p> Tenga en cuenta que cada una de las operaciones generará una modificación del DataFrame, el cual debe ser actualizado con cada una de ellas**."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Ahora tome la columna `cod_fis` y configure con ella el índice (index) del DataFrame, posteriormente elimine la columna `cod_fis` de la base de datos."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ (USE MÁXIMO 2 LÍNEAS DE CÓDIGO)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Muestre una descripción de la base de datos, una tabla en la que se muestren los nombres de las variables (columnas), su tipo de valor y cantidad de registros para cada una de ellas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ  (USE SOLO UNA LÍNEA DE CÓDIGO)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Una estrategia (y adicionalmente la más sencilla) para tratar la información perdida, es aquella llamada *imputación por la media*, la cual consiste en asignar el promedio de los valores validos de la variable a los campos pérdidos de la misma, no obstante, cuando la cantidad de información perdida es considerablemente grande, se recomienda usar otras estrategías que permitan recuperar la información faltante.\n",
+    "\n",
+    "Verifique si la base de datos presenta o no datos perdidos, y de ser así, identifique las columnas que los presentan. Proceda de la siguiente manera:\n",
+    "\n",
+    "+ Si la información perdida supera el 5% del total de los datos, elimine las filas coninformación faltante, en caso contrario,asigne a cada dato perdido el valor del promedio de su correspondiente variable."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### **ESCRIBA ACÁ LAS PRINCIPALES CONCLUSIONES DEL ANALISIS UNIVARIADO CUANTITATIVO**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Parte 2: Exploración Univariada de Datos\n",
+    "\n",
+    "### 2.1 Análisis variables cuantitativas\n",
+    "\n",
+    "El análisis univariado explora una variable a la vez. Cuando se analiza una variable de forma independiente, generalmente se tiene interés en la distribución de sus valores que caracterizan a los individuos, ignorando su relación con otras varibles del conjunto de datos.\n",
+    "\n",
+    "A continuación, se consideraran algunas herramientas para el análisis unidimensional.\n",
+    "\n",
+    "+ **Histogramas y densidades**\n",
+    "\n",
+    "Para las variables cuantitativas identificadas en la base de arboles, genere, de manera separada, sus correspondientes histogramas y gráficas de densidad de probabilidad.\n",
+    "\n",
+    "Una forma fácil de ver la distribución de una variable numérica es graficar su histograma usando el método `hist()` del `DataFrame` de `pandas`. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "La forma que toma el histograma da pistas sobre el tipo de distribución subyacente de la variable (normal, exponencial, etc.) También puede detectar cualquier tipo de asimetría en su forma e incluso algunas anomalías. Conocer la distribución de los valores de los predictores es importante cuando usan métodos de aprendizaje que asumen un tipo de distribución particular (generalmente gaussiana).\n",
+    "\n",
+    "Una mejor estrategia más de entender visualmente la distribución de los datos se encuentra en los gráficos de densidad de probabilidad (Kernel de densidades), los cuales se pueden considerar como una versión suavizada del histograma. N\n",
+    "\n",
+    "No obstante, la mejor forma de entender y conocer la distribución de una serie de datos, corresponde a las pruebas de bondad de ajuste, las cuales periten estimar incluso los parámetros de la distribución encontrada, sin embargo, este tema se escapa al objetivo de este trabajo.\n",
+    "\n",
+    "Creemos los gráficos de densidad para las mismas dos variables para las que se generaron los histogramas, en este caso, use la librería `matplotlib` para crear las correspondientes gráficas."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "+ **Boxplot y Diagrama de Violín**\n",
+    "\n",
+    "En muchas ocasiones no es sufienciente con conocer la forma de la distribución de datos numéricos, se necesita además, tener información sobre la variabilidad o dispersión de los mismos.\n",
+    "\n",
+    "Un diagrama de caja (Boxplot) es un gráfico que permite tener una idea de la distribución de los datos, pero además permite tener un resúmen de diferentes medidas de los datos como lo son el primer cuartil (Q1), la medianayel tercer cuartil (Q3),además de su capacidad para representar los datos atípicos de la serie de datos.\n",
+    "\n",
+    "POr su parte, el Diagrama de Violin, combina la funcionalidad del Boxplot y la de la estimación kernel de la densidad de probabilidad de la serie.\n",
+    "\n",
+    "Use el método `boxplot` de la librearía `matplotlib.pyplot`. En el caso de los Diagramas de Violin use el método `violinplot` de la librería `seaborn`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "+ **Descripción de los datos**\n",
+    "\n",
+    "Calcule unas estadísticas descriptivas para las variables numéricas."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ (USE MÁXIMO 1 LÍNEAS DE CÓDIGO)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### **ESCRIBA ACÁ LAS PRINCIPALES CONCLUSIONES DEL ANALISIS UNIVARIADO CUANTITATIVO**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2.1 Análisis variables categóricas\n",
+    "\n",
+    "Las variables categóricas contienen un número finito de valores. Cada uno de estos valores etiqueta una una observación a una categoría correspondiente (factor), reflejando de esta manera las propiedades cualitativas de los individuos. Si los valores de una variable categórica se encuentran ordenados, esta se conoce como **variable ordinal**.\n",
+    "\n",
+    "+ Distribución de frecuencias\n",
+    "\n",
+    "Identifique las varibles categóricas y realice una tabla de frecuencias para las mismas."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "+ Diagrama de barras\n",
+    "\n",
+    "El diagrama de barras es una representación gráfica de la tabla de frecuencias.\n",
+    "\n",
+    "Para ello, tome como base la(s) tabla(s) de frecuencias generada(s) anteriormente y use el módulo `bar` de la librearía `matplotlib.pyplot`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### **ESCRIBA ACÁ LAS PRINCIPALES CONCLUSIONES DEL ANALISIS UNIVARIADO CUANTITATIVO**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Parte 3: Exploración Bivariada de Datos\n",
+    "\n",
+    "### 3.1 Análisis de variables cuantitativas\n",
+    "\n",
+    "Los métodos de visualización bivariados permiten identificar relaciones entre dos variables diferentes. Al igual que en el caso de los gráficos univariados, el tipo específico de visualización dependerá de los tipos de variables que se analicen.\n",
+    "\n",
+    "+ Matriz de Correlaciones\n",
+    "\n",
+    "Permite tener un panorama general del correlaciones entre las variables numéricas del conjunto de datos. Esta información es importante conocerla, ya que algunos algoritmos de aprendizaje (por ejemplo la regresión lineal) no manejan bien los predictores altamente correlacionados. De esta manera, se pueden tomar decisiones importantes como usar la regularización o penalización de los modelos.\n",
+    "\n",
+    "Investigue y aplique alguna función de python de las librerías trabajadas hasta el momento para trazar la matriz de correlaciones."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "+ Scatter plot\n",
+    "\n",
+    "Los gráficos *scatterplot* o diagramas de dispersión, muestra los valores de dos variables numéricas como coordenadas cartesianas en un espacio de $\\mathbb{R}^2$. También es posible construir estos diagramas en un espacio $\\mathbb{R}^3$.\n",
+    "\n",
+    "Use la librería `matplotlib` para construir un diagrama de dispersión para dos variables de la base de arboles, escoja las dos variables con menor correlación absoluta de la base de datos."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Existen formas más elaboradas de realizar estos diagramas de dispersión. Éxplore el modulo `jointplot` de la librería `seaborn` para generar un gráfico de dispersión y observe la información complementaria."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "+ Scatterplot matrix\n",
+    "\n",
+    "Algunas veces, es posible construir una matriz de diagramas de dispersión, en las cuales se puede observar la totalidad de cruces bivariados entre las variables. Dicha matriz contiene en su diagonal las distribuciones de las variables correspondientes. \n",
+    "\n",
+    "Explore la librería `seaborn` para crear una matriz de este tipo."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### **ESCRIBA ACÁ LAS PRINCIPALES CONCLUSIONES DEL ANALISIS UNIVARIADO CUANTITATIVO**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 3.2 Variables cuantitativas vs. Variables Categóricas\n",
+    "\n",
+    "En este caso, se busca que los gráficos cuantitativa interactuen con variables categóricas,  de manera que dicha información permita la posibilidad de encontrar información comparativa relevante en los datos.\n",
+    "\n",
+    "Los diagramas de dispersión anteriores, permiten analizar la relación numérica entre dos variables, si adicionalmente se \"colorea\" cada uno de los puntos del diagrama de dispersión con la respectiva fisiología de árbol, se podría tener una mayor capacidad de explicar la relación o encontrar diferencias relevantes en los datos. \n",
+    "\n",
+    "Explore y encuentre una función en alguna de las librerías `matplotlib` o `seaborn` que permita realizar lo anteriormente descrito (escoja una de las dos y use solo un bloque de código conlas líneas que requiera).\n",
+    "\n",
+    "[Vea acá](https://www.guru99.com/images/r_programming/032918_0732_Scatterplot3.png) un ejemplo en **R** de los requerido."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Otra estrategía es crear diagramas de caja o de violines para visualizar la distribución de las variables numéricas en diferentes grupos separados, en este caso, las diferentes fisiologías.\n",
+    "\n",
+    "Use la librería `matplotlib` para crear bosplots que comparen para cada variable cuantitativa, su distribución para cada tipo de fisiología. [Vea acá](https://media.geeksforgeeks.org/wp-content/uploads/20200929010350/BoxPlot31.png) un ejemplo en **R** de los requerido."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ESCRIBA SU CÓDIGO AQUÍ"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### **ESCRIBA ACÁ LAS PRINCIPALES CONCLUSIONES DEL ANALISIS UNIVARIADO CUANTITATIVO**"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
